@@ -1,0 +1,18 @@
+Source: logster
+Maintainer: Andrew Otto (WMF) <otto@wikimedia.org>
+Section: python
+Priority: optional
+Build-Depends:  python, python-setuptools, debhelper (>= 9),
+Standards-Version: 3.9.5
+Vcs-Git: https://gerrit.wikimedia.org/r/operations/debs/logster -b debian
+Vcs-Browser: http://git.wikimedia.org/tree/operations%2Fdebs%logster.git/refs%2Fheads%2Fdebian
+
+Package: logster
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, logcheck
+X-Python-Version: >= 2.6
+Provides: ${python:Provides}
+Description: Parse log files, generate metrics for Statsd, Graphite, Ganglia, and more.
+ Logster is a utility for reading log files and generating metrics in Graphite,
+ Ganglia, Statsd, Amazon CloudWatch, etc.  It is ideal for visualizing trends of
+ events that are occurring in your application/system/error logs.
