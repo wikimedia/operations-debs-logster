@@ -1,3 +1,9 @@
+logster (0.0.1-2~precise1) unstable; urgency=low
+
+  * Fixed dependency issue: depends on logtail, not logcheck package.
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Mon, 2 Dec 2013 18:23:04 +0000
+
 logster (0.0.1-1~precise1) unstable; urgency=low
 
   * Initial release

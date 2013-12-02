@@ -9,7 +9,7 @@ Vcs-Browser: http://git.wikimedia.org/tree/operations%2Fdebs%logster.git/refs%2F
 
 Package: logster
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, logcheck
+Depends: ${misc:Depends}, ${python:Depends}, logtail
 X-Python-Version: >= 2.6
 Provides: ${python:Provides}
 Description: Parse log files, generate metrics for Statsd, Graphite, Ganglia, and more.
