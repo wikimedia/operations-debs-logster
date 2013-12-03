@@ -98,12 +98,16 @@ class JsonLogster(LogsterParser):
             if isinstance(metric_value, float):
                 metric_type = 'float'
             elif isinstance(metric_value, int) or isinstance(metric_value, long):
+                # bool is a subclass of int.  If metric_value
+                # is a bool, then convert it to its integer value.
+                if isinstance(metric_value, bool):
+                    metric_value = int(metric_value)
                 metric_type = 'int32'
             else:
                 metric_type = 'string'
                 metric_value = str(metric_value)
 
-            metric_objects.append(MetricObject(metric_name, metric_value, type='int'))
+            metric_objects.append(MetricObject(metric_name, metric_value, type=metric_type))
 
         return metric_objects
 
