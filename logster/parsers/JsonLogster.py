@@ -32,7 +32,7 @@ class JsonLogster(LogsterParser):
 
         optparser = optparse.OptionParser()
         optparser.add_option('--key-separator', '-k', dest='key_separator', default='.',
-        help='Key separator for flattened json object key name. Default: \'.\'')
+        help='Key separator for flattened json object key name. Default: \'.\'  \'/\' is not allowed.''')
 
         opts, args = optparser.parse_args(args=options)
         self.key_separator = opts.key_separator
@@ -71,6 +71,10 @@ class JsonLogster(LogsterParser):
                 key = key_filter_callback(key)
             if key is False:
                 continue
+            # '/' is  not allowed in key names.
+            # Ganglia writes files based on key names
+            # and doesn't escape these in the path.
+            key = key.replace('/', self.key_separator)
 
             if hasattr(child, '__iter__'):
                 # merge the child items all together
