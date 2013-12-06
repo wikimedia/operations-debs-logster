@@ -1,0 +1,23 @@
+logster (0.0.3-1~precise1) precise; urgency=low
+
+  * Updating from master, merged in log_dir option from upstream and JsonParser bugfix
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Thu, 05 Dec 2013 22:31:13 +0000
+
+logster (0.0.2-1~precise1) unstable; urgency=low
+
+  * Merged metric type fix to JsonLogster parser from master
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Tue, 5 Dec 2013 21:30:00 +0000
+
+logster (0.0.1-2~precise1) unstable; urgency=low
+
+  * Fixed dependency issue: depends on logtail, not logcheck package
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Mon, 2 Dec 2013 18:23:04 +0000
+
+logster (0.0.1-1~precise1) unstable; urgency=low
+
+  * Initial release
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Thu, 14 Nov 2013 22:00:04 +0000
