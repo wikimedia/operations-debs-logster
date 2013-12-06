@@ -18,6 +18,7 @@ class TestJsonLogster(unittest.TestCase):
             '2.1': ['a','b'],
             # '/' should be replaced with key_separator
             '3/1': 'nonya',
+            'notme': 'nope',
         }
         self.key_separator = '&'
         self.flattened_should_be = {
@@ -36,6 +37,8 @@ class TestJsonLogster(unittest.TestCase):
     def key_filter_callback(self, key):
         if key == 'value2':
             key = 'valuetwo'
+        if key == 'notme':
+            key = False
 
         return key
 

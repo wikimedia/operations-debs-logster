@@ -55,12 +55,12 @@ class JsonLogster(LogsterParser):
         MetricObject parameters (such as slope, title, etc.),
         you should override this method.
         '''
-        metric_object = MetricObject(metric_name, metric_value, type=self.infer_metric_type(metric_value))
+        metric_type = self.infer_metric_type(metric_value)
         # make sure the metric value is properly a string.
-        if metric_object.type == 'string':
-            metric_object.value = str(metric_object.value)
+        if metric_type == 'string':
+            metric_value = str(metric_value)
 
-        return metric_object
+        return MetricObject(metric_name, metric_value, type=metric_type)
 
     def infer_metric_type(self, metric_value):
         '''
@@ -105,14 +105,17 @@ class JsonLogster(LogsterParser):
             if key is False:
                 continue
 
+            # append this key to the end of all keys seen so far
+            all_keys = parent_keys + [str(key)]
+
             if hasattr(child, '__iter__'):
                 # merge the child items all together
-                flattened.update(self.flatten_object(child, separator, key_filter_callback, parent_keys + [str(key)]))
+                flattened.update(self.flatten_object(child, separator, key_filter_callback, all_keys))
             else:
                 # '/' is  not allowed in key names.
                 # Ganglia writes files based on key names
                 # and doesn't escape these in the path.
-                final_key = separator.join(parent_keys + [str(key)]).replace('/', self.key_separator)
+                final_key = separator.join(all_keys).replace('/', self.key_separator)
                 flattened[final_key] = child
 
         return flattened
