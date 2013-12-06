@@ -1,4 +1,4 @@
-logster (0.0.4-1) precise; urgency=low
+logster (0.0.4-1~precise1) precise; urgency=low
 
   * Updating from master, bugfix for JsonLogster parser
 
