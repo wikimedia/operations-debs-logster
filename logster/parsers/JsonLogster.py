@@ -45,6 +45,39 @@ class JsonLogster(LogsterParser):
         '''
         return key
 
+    def get_metric_object(self, metric_name, metric_value):
+        '''
+        Default key_to_metric_object method.
+        Given a metric name and value, this returns
+        a MetricObject filled in.  This default method
+        will attempt to infer MetricObject.type from the metric_value
+        type, but nothing more.  If you need to set any particular
+        MetricObject parameters (such as slope, title, etc.),
+        you should override this method.
+        '''
+        metric_object = MetricObject(metric_name, metric_value, type=self.infer_metric_type(metric_value))
+        # make sure the metric value is properly a string.
+        if metric_object.type == 'string':
+            metric_object.value = str(metric_object.value)
+
+        return metric_object
+
+    def infer_metric_type(self, metric_value):
+        '''
+        Infers MetricObject type from the
+        variable type of metric_value.
+        '''
+        if isinstance(metric_value, float):
+            metric_type = 'float'
+        # use int32 for int and long.
+        # If bool, use 'string'. (bool is a subtype of int)
+        elif (isinstance(metric_value, int) or isinstance(metric_value, long)) and not isinstance(metric_value, bool):
+            metric_type = 'int32'
+        else:
+            metric_type = 'string'
+
+        return metric_type
+
     def flatten_object(self, node, separator='.', key_filter_callback=None, parent_keys=[]):
         '''
         Recurses through dicts and/or lists and flattens them
@@ -71,16 +104,15 @@ class JsonLogster(LogsterParser):
                 key = key_filter_callback(key)
             if key is False:
                 continue
-            # '/' is  not allowed in key names.
-            # Ganglia writes files based on key names
-            # and doesn't escape these in the path.
-            key = key.replace('/', self.key_separator)
 
             if hasattr(child, '__iter__'):
                 # merge the child items all together
                 flattened.update(self.flatten_object(child, separator, key_filter_callback, parent_keys + [str(key)]))
             else:
-                final_key = separator.join(parent_keys + [str(key)])
+                # '/' is  not allowed in key names.
+                # Ganglia writes files based on key names
+                # and doesn't escape these in the path.
+                final_key = separator.join(parent_keys + [str(key)]).replace('/', self.key_separator)
                 flattened[final_key] = child
 
         return flattened
@@ -103,19 +135,7 @@ class JsonLogster(LogsterParser):
 
         metric_objects = []
         for metric_name, metric_value in self.metrics.items():
-            if isinstance(metric_value, float):
-                metric_type = 'float'
-            elif isinstance(metric_value, int) or isinstance(metric_value, long):
-                # bool is a subclass of int.  If metric_value
-                # is a bool, then convert it to its integer value.
-                if isinstance(metric_value, bool):
-                    metric_value = int(metric_value)
-                metric_type = 'int32'
-            else:
-                metric_type = 'string'
-                metric_value = str(metric_value)
-
-            metric_objects.append(MetricObject(metric_name, metric_value, type=metric_type))
+            metric_objects.append(self.get_metric_object(metric_name, metric_value))
 
         return metric_objects
 
