@@ -1,4 +1,5 @@
 from logster.parsers.JsonLogster import JsonLogster
+from logster.logster_helper import MetricObject
 import unittest
 
 class TestJsonLogster(unittest.TestCase):
@@ -14,6 +15,10 @@ class TestJsonLogster(unittest.TestCase):
                 }
             },
             '2.1': ['a','b'],
+            '2.1': ['a','b'],
+            # '/' should be replaced with key_separator
+            '3/1': 'nonya',
+            'notme': 'nope',
         }
         self.key_separator = '&'
         self.flattened_should_be = {
@@ -23,6 +28,8 @@ class TestJsonLogster(unittest.TestCase):
             '1.1&1.2&value4': False,
             '2.1&0': 'a',
             '2.1&1': 'b',
+            # '/' should be replaced with key_separator
+            '3&1': 'nonya',
         }
 
         self.json_logster = JsonLogster('--key-separator ' + self.key_separator)
@@ -30,6 +37,8 @@ class TestJsonLogster(unittest.TestCase):
     def key_filter_callback(self, key):
         if key == 'value2':
             key = 'valuetwo'
+        if key == 'notme':
+            key = False
 
         return key
 
@@ -39,6 +48,25 @@ class TestJsonLogster(unittest.TestCase):
     def test_flatten_object(self):
         flattened = self.json_logster.flatten_object(self.json_data, self.key_separator, self.key_filter_callback)
         self.assertEquals(flattened, self.flattened_should_be)
+
+    def test_infer_metric_type(self):
+        self.assertEquals('float', self.json_logster.infer_metric_type(1.2))
+        self.assertEquals('int32', self.json_logster.infer_metric_type(1))
+        self.assertEquals('string', self.json_logster.infer_metric_type('woohooo'))
+        self.assertEquals('string', self.json_logster.infer_metric_type(False))
+
+    def test_get_metric_object(self):
+        should_be = MetricObject('int', 1, type='int32')
+        metric_object = self.json_logster.get_metric_object('int', 1)
+        self.assertEquals(should_be.name, metric_object.name)
+        self.assertEquals(should_be.value, metric_object.value)
+        self.assertEquals(should_be.type, metric_object.type)
+
+        should_be = MetricObject('bool', 'False', type='string')
+        metric_object = self.json_logster.get_metric_object('bool', False)
+        self.assertEquals(should_be.name, metric_object.name)
+        self.assertEquals(should_be.value, metric_object.value)
+        self.assertEquals(should_be.type, metric_object.type)
 
 if __name__ == '__main__':
     unittest.main()

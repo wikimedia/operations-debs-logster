@@ -199,8 +199,17 @@ def submit_ganglia(metrics, options):
         if (options.metric_suffix is not None):
             metric.name = metric.name + "_" + options.metric_suffix
 
-        gmetric_cmd = "%s %s --name %s --value %s --type %s --units \"%s\"" % (
-            gmetric, options.gmetric_options, metric.name, metric.value, metric.type, metric.units)
+        gmetric_cmd = "%s %s --name %s --value %s --type %s --units \"%s\" --title \"%s\" --desc  \"%s\" --slope \"%s\"" % (
+            gmetric,
+            options.gmetric_options,
+            metric.name,
+            metric.value,
+            metric.type,
+            metric.units,
+            metric.title,
+            metric.desc,
+            metric.slope
+        )
         logger.debug("Submitting Ganglia metric: %s" % gmetric_cmd)
 
         if (not options.dry_run):
