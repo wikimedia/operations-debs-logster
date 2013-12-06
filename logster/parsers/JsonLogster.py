@@ -90,7 +90,11 @@ class JsonLogster(LogsterParser):
         object's state variables. Takes a single argument, the line to be parsed.'''
 
         json_data = json.loads(line)
-        self.metrics = self.flatten_object(json.loads(line), self.key_separator, self.key_filter)
+        # Using update() in order to work with multiple lines.
+        # Since lines are parsed in order as they appear in the file,
+        # if there are multiple entries for the same key, this will
+        # end up using the latest value for that key.
+        self.metrics.update(self.flatten_object(json.loads(line), self.key_separator, self.key_filter))
 
     def get_state(self, duration):
         '''Run any necessary calculations on the data collected from the logs
