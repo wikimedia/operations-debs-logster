@@ -1,3 +1,9 @@
+logster (0.0.5-1~precise1) precise; urgency=low
+
+  * Updates for setting more Ganglia attributes and enhancements to JsonLogster.
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Fri, 06 Dec 2013 22:07:46 +0000
+
 logster (0.0.4-1~precise1) precise; urgency=low
 
   * Updating from master, bugfix for JsonLogster parser
