@@ -1,6 +1,12 @@
+logster (0.0.4-1) precise; urgency=low
+
+  * Updating from master, bugfix for JsonLogster parser
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Fri, 06 Dec 2013 17:43:43 +0000
+
 logster (0.0.3-1~precise1) precise; urgency=low
 
-  * Updating from master, merged in log_dir option from upstream and JsonParser bugfix
+  * Updating from master, merged in log_dir option from upstream and JsonLogster parser bugfix
 
  -- Andrew Otto (WMF) <otto@wikimedia.org>  Thu, 05 Dec 2013 22:31:13 +0000
 
