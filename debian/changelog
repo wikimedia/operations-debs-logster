@@ -1,3 +1,9 @@
+logster (0.0.7-1~precise1) precise; urgency=low
+
+  * Fix for Ganglia slope in LineCountParser
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Wed, 02 Apr 2014 22:20:09 +0000
+
 logster (0.0.6-1~precise1) precise; urgency=low
 
   * Refactor of logster.py
