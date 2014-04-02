@@ -320,7 +320,7 @@ def parse(class_name, log_file, options):
 
     if class_name.find('.') == -1:
         # If it's a single name, find it in the base logster package
-        class_name = 'logster.parsers.%s.%s' % (class_name, class_name)
+        class_name = 'parsers.%s.%s' % (class_name, class_name)
 
     logger.info("Executing parser %s on logfile %s" % (class_name, log_file))
     logger.debug("Using state file %s" % logtail_state_file)
