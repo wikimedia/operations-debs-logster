@@ -53,6 +53,6 @@ class LineCountLogster(LogsterParser):
 
         # Return a list of metrics objects
         return [
-            MetricObject('line_rate',  (float(self.line_count) / float(self.duration)), 'lines per sec', type='float'),
+            MetricObject('line_rate',  (float(self.line_count) / float(self.duration)), 'lines per sec', type='float', slope='both'),
         ]
 
