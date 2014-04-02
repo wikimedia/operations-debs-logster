@@ -1,3 +1,10 @@
+logster (0.0.6-1~precise1) precise; urgency=low
+
+  * Refactor of logster.py
+  * New parser LineCountParser
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Wed, 02 Apr 2014 20:48:09 +0000
+
 logster (0.0.5-1~precise1) precise; urgency=low
 
   * Updates for setting more Ganglia attributes and enhancements to JsonLogster.
