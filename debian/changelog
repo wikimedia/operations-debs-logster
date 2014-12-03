@@ -1,3 +1,9 @@
+logster (0.0.8-1~trusty1) wikimedia-trusty; urgency=medium
+
+  * Fix for statsd sumbitter
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Wed, 03 Dec 2014 22:24:36 +0000
+
 logster (0.0.7-1~precise1) precise; urgency=low
 
   * Fix for Ganglia slope in LineCountParser
