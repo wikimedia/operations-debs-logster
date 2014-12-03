@@ -252,7 +252,7 @@ def submit_nsca(metrics, options):
             print "%s" % nsca_cmd
 
 
-def submit_statsd(metrics, addr):
+def submit_statsd(metrics, options):
     if (not options.dry_run):
         host = options.statsd_host.split(':')
 
