@@ -4,36 +4,36 @@
 ###  Copyright 2011, Etsy, Inc.
 ###
 ###  This file is part of Logster.
-###  
+###
 ###  Logster is free software: you can redistribute it and/or modify
 ###  it under the terms of the GNU General Public License as published by
 ###  the Free Software Foundation, either version 3 of the License, or
 ###  (at your option) any later version.
-###  
+###
 ###  Logster is distributed in the hope that it will be useful,
 ###  but WITHOUT ANY WARRANTY; without even the implied warranty of
 ###  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ###  GNU General Public License for more details.
-###  
+###
 ###  You should have received a copy of the GNU General Public License
 ###  along with Logster. If not, see <http://www.gnu.org/licenses/>.
 ###
-###  Forked from the ganglia-logtailer project 
+###  Forked from the ganglia-logtailer project
 ###  (http://bitbucket.org/maplebed/ganglia-logtailer):
 ###    Copyright Linden Research, Inc. 2008
 ###    Released under the GPL v2 or later.
-###    For a full description of the license, please visit 
+###    For a full description of the license, please visit
 ###    http://www.gnu.org/licenses/gpl.txt
 ###
 
 import os
 import sys
-import re 
+import re
 import optparse
 import stat
 import logging.handlers
 import fcntl
-import socket 
+import socket
 import traceback
 
 from time import time, strftime, gmtime
@@ -75,9 +75,9 @@ def get_cmdline_optparse():
     cmdline.add_option('--metric-suffix', '-x', action='store',
                         help='Add suffix to all published metrics. This is for people that may add suffix at the end of their metrics.',
                         default=None)
-    cmdline.add_option('--parser-help', action='store_true', 
+    cmdline.add_option('--parser-help', action='store_true',
                         help='Print usage and options for the selected parser')
-    cmdline.add_option('--parser-options', action='store', 
+    cmdline.add_option('--parser-options', action='store',
                         help='Options to pass to the logster parser such as "-o VALUE --option2 VALUE". These are parser-specific and passed directly to the parser.')
     cmdline.add_option('--gmetric-options', action='store',
                         help='Options to pass to gmetric such as "-d 180 -c /etc/ganglia/gmond.conf" (default). These are passed directly to gmetric.',
@@ -183,15 +183,15 @@ def submit_graphite(metrics, options):
 
     try:
         for metric in metrics:
-    
+
             if (options.metric_prefix != ""):
                 metric.name = options.metric_prefix + "." + metric.name
             if (options.metric_suffix is not None):
                 metric.name = metric.name + "." + options.metric_suffix
-    
+
             metric_string = "%s %s %s" % (metric.name, metric.value, metric.timestamp)
             logger.debug("Submitting Graphite metric: %s" % metric_string)
-    
+
             if (not options.dry_run):
                 s.sendall("%s\n" % metric_string)
             else:
@@ -202,12 +202,12 @@ def submit_graphite(metrics, options):
 
 def submit_cloudwatch(metrics, options):
     for metric in metrics:
-        
+
         if (options.metric_prefix != ""):
             metric.name = options.metric_prefix + "." + metric.name
         if (options.metric_suffix is not None):
             metric.name = metric.name + "." + options.metric_suffix
-        
+
         metric.timestamp = strftime("%Y%m%dT%H:%M:00Z", gmtime(metric.timestamp))
         metric.units = "None"
         metric_string = "%s %s %s" % (metric.name, metric.value, metric.timestamp)
@@ -225,7 +225,7 @@ def submit_cloudwatch(metrics, options):
             except CloudWatchException, e:
                 logger.debug(e.message)
                 sys.exit(1)
-        else:       
+        else:
             print metric_string
 
 
@@ -282,7 +282,7 @@ def start_locking(lockfile_name):
         fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
         f.write("%s" % os.getpid())
     except IOError:
-        # Would be better to also check the pid in the lock file and remove the 
+        # Would be better to also check the pid in the lock file and remove the
         # lock file if that pid no longer exists in the process table.
         raise LockingError("Cannot acquire logster lock (%s)" % lockfile_name)
 
@@ -308,7 +308,7 @@ def end_locking(lockfile_fd, lockfile_name):
 def parse(class_name, log_file, options):
     if (options.debug):
         logger.setLevel(logging.DEBUG)
-    
+
     state_dir  = options.state_dir
     log_dir    = options.log_dir
     logtail    = options.logtail
@@ -330,7 +330,7 @@ def parse(class_name, log_file, options):
     module = __import__(module_name, globals(), locals(), [parser_name])
     parser = getattr(module, parser_name)(option_string=options.parser_options)
 
-    # Check for lock file so we don't run multiple copies of the same parser 
+    # Check for lock file so we don't run multiple copies of the same parser
     # simultaneuosly. This will happen if the log parsing takes more time than
     # the cron period, which is likely on first run if the logfile is huge.
     try:
@@ -341,7 +341,7 @@ def parse(class_name, log_file, options):
 
     # Get input to parse.
     try:
-        
+
         # Read the age of the state file to see how long it's been since we last
         # ran. Replace the state file if it has gone missing. While we are here,
         # touch the state file to reset the time in case logtail doesn't
@@ -367,7 +367,7 @@ def parse(class_name, log_file, options):
 
     except SystemExit, e:
         raise
- 
+
     except Exception, e:
         # note - there is no exception when logtail doesn't exist.
         # I don't know when this exception will ever actually be triggered.
