@@ -139,24 +139,27 @@ def submit_stats(parser, duration, options):
 
 def submit_stdout(metrics, options):
     for metric in metrics:
+        metric_name = metric.name
+
         if (options.metric_prefix != ""):
-            metric.name = options.metric_prefix + options.stdout_separator + metric.name
+            metric_name = options.metric_prefix + options.stdout_separator + metric_name
         if (options.metric_suffix is not None):
-            metric.name = metric.name + options.stdout_separator + options.metric_suffix
-        print "%s %s %s" %(metric.timestamp, metric.name, metric.value)
+            metric_name = metric_name + options.stdout_separator + options.metric_suffix
+        print "%s %s %s" %(metric.timestamp, metric_name, metric.value)
 
 def submit_ganglia(metrics, options):
     for metric in metrics:
+        metric_name = metric.name
 
         if (options.metric_prefix != ""):
-            metric.name = options.metric_prefix + "_" + metric.name
+            metric_name = options.metric_prefix + "_" + metric_name
         if (options.metric_suffix is not None):
-            metric.name = metric.name + "_" + options.metric_suffix
+            metric_name = metric_name + "_" + options.metric_suffix
 
         gmetric_cmd = "%s %s --name %s --value %s --type %s --units \"%s\" --title \"%s\" --desc  \"%s\" --slope \"%s\"" % (
             gmetric,
             options.gmetric_options,
-            metric.name,
+            metric_name,
             metric.value,
             metric.type,
             metric.units,
@@ -183,13 +186,14 @@ def submit_graphite(metrics, options):
 
     try:
         for metric in metrics:
+            metric_name = metric.name
 
             if (options.metric_prefix != ""):
-                metric.name = options.metric_prefix + "." + metric.name
+                metric_name = options.metric_prefix + "." + metric_name
             if (options.metric_suffix is not None):
-                metric.name = metric.name + "." + options.metric_suffix
+                metric_name = metric_name + "." + options.metric_suffix
 
-            metric_string = "%s %s %s" % (metric.name, metric.value, metric.timestamp)
+            metric_string = "%s %s %s" % (metric_name, metric.value, metric.timestamp)
             logger.debug("Submitting Graphite metric: %s" % metric_string)
 
             if (not options.dry_run):
@@ -202,15 +206,16 @@ def submit_graphite(metrics, options):
 
 def submit_cloudwatch(metrics, options):
     for metric in metrics:
+        metric_name = metric.name
 
         if (options.metric_prefix != ""):
-            metric.name = options.metric_prefix + "." + metric.name
+            metric_name = options.metric_prefix + "." + metric_name
         if (options.metric_suffix is not None):
-            metric.name = metric.name + "." + options.metric_suffix
+            metric_name = metric_name + "." + options.metric_suffix
 
         metric.timestamp = strftime("%Y%m%dT%H:%M:00Z", gmtime(metric.timestamp))
         metric.units = "None"
-        metric_string = "%s %s %s" % (metric.name, metric.value, metric.timestamp)
+        metric_string = "%s %s %s" % (metric_name, metric.value, metric.timestamp)
         logger.debug("Submitting CloudWatch metric: %s" % metric_string)
 
         if (not options.dry_run):
@@ -236,12 +241,14 @@ def submit_nsca(metrics, options):
     host = options.nsca_host.split(':')
 
     for metric in metrics:
-        if (options.metric_prefix != ""):
-            metric.name = options.metric_prefix + "_" + metric.name
-        if (options.metric_suffix is not None):
-            metric.name = metric.name + "_" + options.metric_suffix
+        metric_name = metric.name
 
-        metric_string = "\t".join((options.nsca_service_hostname, metric.name, str(metric.value), metric.units,))
+        if (options.metric_prefix != ""):
+            metric_name = options.metric_prefix + "_" + metric_name
+        if (options.metric_suffix is not None):
+            metric_name = metric_name + "_" + options.metric_suffix
+
+        metric_string = "\t".join((options.nsca_service_hostname, metric_name, str(metric.value), metric.units,))
         logger.debug("Submitting NSCA status: %s" % metric_string)
 
         nsca_cmd = "echo '%s' | %s -H %s -p %s" % (metric_string, send_nsca, host[0], host[1],)
@@ -257,11 +264,13 @@ def submit_statsd(metrics, options):
         host = options.statsd_host.split(':')
 
     for metric in metrics:
+        metric_name = metric.name
+
         if (options.metric_prefix != ""):
-            metric.name = options.metric_prefix + '.' + metric.name
+            metric_name = options.metric_prefix + '.' + metric_name
         if (options.metric_suffix is not None):
-            metric.name = metric.name + '.' + options.metric_suffix
-        metric_string = "%s:%s|g" % (metric.name, metric.value)
+            metric_name = metric_name + '.' + options.metric_suffix
+        metric_string = "%s:%s|g" % (metric_name, metric.value)
         logger.debug("Submitting statsd metric: %s" % metric_string)
 
         if (not options.dry_run):

@@ -32,18 +32,22 @@ class JsonLogster(LogsterParser):
 
         optparser = optparse.OptionParser()
         optparser.add_option('--key-separator', '-k', dest='key_separator', default='.',
-        help='Key separator for flattened json object key name. Default: \'.\'  \'/\' is not allowed.''')
+        help='Key separator for flattened json object key name. Default: \'.\'  \'/\' and \':\' are not allowed.''')
 
         opts, args = optparser.parse_args(args=options)
         self.key_separator = opts.key_separator
+
+        if self.key_separator == '/' or self.key_separator == ':':
+            raise RuntimeError('Cannot use : or / as key_separator.')
 
     def key_filter(self, key):
         '''
         Default key_filter method.  Override and implement
         this method if you want to do any filtering or transforming
-        on specific keys in your JSON object.
+        on specific keys in your JSON object.  This translates
+        key_separator and ':' to underscores.
         '''
-        return key
+        return key.replace(self.key_separator, '_').replace(':', '_')
 
     def get_metric_object(self, metric_name, metric_value):
         '''
