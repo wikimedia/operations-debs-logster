@@ -1,3 +1,9 @@
+logster (0.0.9-1~precise1) wikimedia-precise; urgency=low
+
+  * Fix for multiple outputs
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Mon, 29 Dec 2014 16:42:46 +0000
+
 logster (0.0.8-1~trusty1) wikimedia-trusty; urgency=medium
 
   * Fix for statsd sumbitter
