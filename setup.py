@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name='logster',
-    version='0.0.9',
+    version='0.0.10',
     description='Parse log files, generate metrics for Graphite, Ganglia, statsd and more.',
     author='Etsy',
     url='https://github.com/etsy/logster',
