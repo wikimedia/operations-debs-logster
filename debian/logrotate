@@ -1,4 +1,4 @@
-/var/log/logrotate/*.log {
+/var/log/logster/*.log {
         daily
         missingok
         rotate 7

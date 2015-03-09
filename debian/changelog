@@ -1,3 +1,10 @@
+logster (0.0.10-1~trusty1) wikimedia-trusty; urgency=medium
+
+  * Don't send non-numeric metrics to statsd
+  * Add debian/logrotate
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Mon, 09 Mar 2015 20:03:58 +0000
+
 logster (0.0.9-1~precise1) wikimedia-precise; urgency=low
 
   * Fix for multiple outputs
