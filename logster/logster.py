@@ -120,6 +120,16 @@ def lineno():
     return inspect.currentframe().f_back.f_lineno
 
 
+def is_number(s):
+    """Return True if is a numeric string or type, False otherwise."""
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+    pass
+
+
 def submit_stats(parser, duration, options):
     metrics = parser.get_state(duration)
 
@@ -265,6 +275,10 @@ def submit_statsd(metrics, options):
 
     for metric in metrics:
         metric_name = metric.name
+
+        if (not is_number(metric.value)):
+            print("WARNING: Cannot send %s to statsd, %s is not a numeric value." % (metric_name, metric.value))
+            continue
 
         if (options.metric_prefix != ""):
             metric_name = options.metric_prefix + '.' + metric_name
