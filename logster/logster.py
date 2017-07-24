@@ -272,6 +272,7 @@ def submit_nsca(metrics, options):
 def submit_statsd(metrics, options):
     if (not options.dry_run):
         host = options.statsd_host.split(':')
+        host[0] = socket.gethostbyname(host[0])
 
     for metric in metrics:
         metric_name = metric.name
