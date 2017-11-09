@@ -5,7 +5,7 @@ Priority: optional
 Build-Depends:  python, python-setuptools, debhelper (>= 9),
 Standards-Version: 3.9.5
 Vcs-Git: https://gerrit.wikimedia.org/r/operations/debs/logster -b debian
-Vcs-Browser: http://git.wikimedia.org/tree/operations%2Fdebs%logster.git/refs%2Fheads%2Fdebian
+Vcs-Browser: https://phabricator.wikimedia.org/source/operations-debs-logster/repository/master/
 
 Package: logster
 Architecture: all
